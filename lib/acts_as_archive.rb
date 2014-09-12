@@ -222,9 +222,14 @@ class ActsAsArchive
       if Rails.version[0..2] >= '3.2'
         def delete_with_archive(arel, name = nil, binds = [])
           sql = to_sql(arel, binds)
+
           unless ActsAsArchive.disabled
+            id = binds[0].try(:last)
             from, where = /DELETE FROM (.+)/i.match(sql)[1].split(/\s+WHERE\s+/i, 2)
             from = from.strip.gsub(/[`"]/, '').split(/\s*,\s*/)
+            if id
+              where = where.gsub(/\$1/, id.to_s)
+            end
 
             ActsAsArchive.find(from).each do |config|
               ActsAsArchive.move(config, where)
