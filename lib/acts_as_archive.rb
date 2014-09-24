@@ -191,10 +191,6 @@ class ActsAsArchive
       def delete!(*args)
         ActsAsArchive.disable { self.delete(*args) }
       end
-
-      def destroy!(*args)
-        ActsAsArchive.disable { self.destroy(*args) }
-      end
     end
   end
 
