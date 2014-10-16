@@ -146,10 +146,13 @@ class ActsAsArchive
 
           unless options[:migrate] == false
             AlsoMigrate.configuration ||= []
-            AlsoMigrate.configuration << options.merge(
+            also_migrate_config = options.merge(
               :source => self.table_name,
               :destination => klass.table_name
             )
+            unless AlsoMigrate.configuration.include?(also_migrate_config)
+              AlsoMigrate.configuration << also_migrate_config
+            end
           end
         end
 
